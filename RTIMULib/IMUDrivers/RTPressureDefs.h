@@ -32,6 +32,7 @@
 #define RTPRESSURE_TYPE_LPS25H              3                   // LPS25H
 #define RTPRESSURE_TYPE_MS5611              4                   // MS5611
 #define RTPRESSURE_TYPE_MS5637              5                   // MS5637
+#define RTPRESSURE_TYPE_BMP280              6                   // BMP280
 
 //----------------------------------------------------------
 //
@@ -49,6 +50,27 @@
 #define BMP180_REG_SCO              0xf4
 #define BMP180_REG_RESULT           0xf6
 #define BMP180_REG_XLSB             0xf8
+
+//----------------------------------------------------------
+//
+//  BMP280 Constants
+
+#define BMP280_ADDRESS             0x77
+#define BMP280_REG_ID              0xD0
+#define BMP280_DEVICE_ID           0x58
+
+// BMP280 REGISTER MAP
+
+#define BMP280_REG_CAL_CONSTANTS_START       0x88
+#define BMP280_REG_CONFIG                    0xF5
+#define BMP280_REG_MEAS_CTRL                 0xF4
+#define BMP280_REG_PRESS_MSB                 0xF7
+#define BMP280_REG_PRESS_LSB                 0xF8
+#define BMP280_REG_PRESS_XLSB                0xF9
+#define BMP280_REG_TEMP_MSB                  0xFA
+#define BMP280_REG_TEMP_LSB                  0xFB
+#define BMP280_REG_TEMP_XLSB                 0xFC
+
 
 //----------------------------------------------------------
 //
