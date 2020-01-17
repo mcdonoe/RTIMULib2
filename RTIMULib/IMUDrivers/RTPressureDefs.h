@@ -56,7 +56,7 @@
 //  BMP280 Constants
 
 #define BMP280_ADDRESS             0x77
-#define BMP280_REG_ID              0xD0
+#define BMP280_REG_ID              0xd0
 #define BMP280_DEVICE_ID           0x58
 
 // BMP280 REGISTER MAP
@@ -113,8 +113,9 @@
 
 //  MS5611 I2C Slave Addresses
 
-#define MS5611_ADDRESS0             0x76
-#define MS5611_ADDRESS1             0x77
+// CONFLICTS WITH BMP
+#define MS5611_ADDRESS0             0x86
+#define MS5611_ADDRESS1             0x87
 
 //	commands
 

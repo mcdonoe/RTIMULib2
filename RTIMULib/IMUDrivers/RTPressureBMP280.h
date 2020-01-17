@@ -33,7 +33,7 @@
 
 #define BMP280_MODE_FORCED       0x2
 #define BMP280_MODE_NORMAL       0x3
-#define BMP280_NORMAL_STANDBY_TIME    0x2  // 125us
+#define BMP280_NORMAL_STANDBY_TIME    0x7  // 125us
 
 // Filter
 #define BMP280_FILTER_COEF_4  0x4
@@ -51,11 +51,11 @@
 
 // Combined control words
 // The config word has STANDBY TIME in bits [5:7], FILTER_COEF_4 in [2:4] and zeros in [0:1]
-#define BMP280_CONFIG_WORD  0x50
+#define BMP280_CONFIG_WORD  0xA0
 
 // Measurement control word has ULTRA_LOWPOWER_T temp measurment in bits [5:7], 
 // STANDARD_RESOLUTION_P in [2:4] and NORMAL MODE in [0:1]
-#define BMP280_MEASUREMENT_CONTROL_WORD  0x2F
+#define BMP280_MEASUREMENT_CONTROL_WORD  0x27
 
 
 class RTIMUSettings;
@@ -94,6 +94,8 @@ private:
     int16_t dig_P7_;
     int16_t dig_P8_;
     int16_t dig_P9_;
+
+    int32_t fineVal_;
 
     int m_state;
     int m_oss;

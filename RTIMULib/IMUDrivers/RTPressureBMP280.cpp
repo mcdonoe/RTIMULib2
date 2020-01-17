@@ -82,11 +82,47 @@ bool RTPressureBMP280::pressureInit()
         return false;
     }
 
+    HAL_INFO("BMP280 Init Complete!\n")
+
     return true;
 }
 
 bool RTPressureBMP280::pressureRead(RTIMU_DATA& data)
 {
+
+    int32_t var1, var2, adc_T;
+    uint8_t sensorData[3];
+
+    if (!m_settings->HALRead(m_pressureAddr, BMP280_REG_TEMP_MSB, 3, sensorData, "Failed to read BMP280 Temp Register")) 
+    {
+        return false;
+        HAL_ERROR("BMP280: Temp. Read Error\n")
+    }
+
+    // Align the data
+    printf("S1: %x S2: %x S3: %x\n", sensorData[0], sensorData[1], sensorData[2]);
+    adc_T = sensorData[0];
+    adc_T <<=8;
+    adc_T |= sensorData[1];
+    adc_T <<=8;
+    adc_T |= sensorData[2]; 
+
+
+    adc_T >>= 4;
+
+    printf("adc_T: %x\n", adc_T);       
+
+    var1 = ((adc_T) / 16384.0 - (dig_T1_) / 1024.0) * (dig_T2_);
+    var2 = (((adc_T) / 131072.0 - (dig_T1_) / 8192.0) * 
+        ((adc_T)/131072.0 - (dig_T1_)/8192.0)) * (dig_T3_);
+
+    printf("Var1 is: %d, Var2 is: %d\n", var1, var2);
+
+    fineVal_ = var1 + var2;
+    float cTemp = fineVal_ / 5120.0;
+    float fTemp = cTemp * 1.8 + 32;
+
+    printf("TEMP IS: %d\n", fTemp);
 /*     data.pressureValid = false;
     data.temperatureValid = false;
     data.temperature = 0;

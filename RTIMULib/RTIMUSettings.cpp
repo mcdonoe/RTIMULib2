@@ -36,6 +36,7 @@
 #include "IMUDrivers/RTIMUBMX055.h"
 
 #include "IMUDrivers/RTPressureBMP180.h"
+#include "IMUDrivers/RTPressureBMP280.h"
 #include "IMUDrivers/RTPressureLPS25H.h"
 
 #include "IMUDrivers/RTHumidityHTS221.h"
@@ -385,7 +386,6 @@ bool RTIMUSettings::discoverPressure(int& pressureType, unsigned char& pressureA
     unsigned char result;
 
     //  auto detect on current bus
-
     if (HALOpen()) {
 
         if (HALRead(BMP180_ADDRESS, BMP180_REG_ID, 1, &result, "")) {
@@ -393,6 +393,15 @@ bool RTIMUSettings::discoverPressure(int& pressureType, unsigned char& pressureA
                 pressureType = RTPRESSURE_TYPE_BMP180;
                 pressureAddress = BMP180_ADDRESS;
                 HAL_INFO("Detected BMP180\n");
+                return true;
+            }
+        }
+
+        if (HALRead(BMP280_ADDRESS, BMP280_REG_ID, 1, &result, "")) {
+            if (result == BMP280_DEVICE_ID) {
+                pressureType = RTPRESSURE_TYPE_BMP280;
+                pressureAddress = BMP280_ADDRESS;
+                HAL_INFO("Detected BMP280\n");
                 return true;
             }
         }
@@ -415,6 +424,7 @@ bool RTIMUSettings::discoverPressure(int& pressureType, unsigned char& pressureA
             }
         }
 
+        // TODO: FIX DETECTION FOR THIS SENSOR
         // check for MS5611 (which unfortunately has no ID reg)
 
         if (HALRead(MS5611_ADDRESS0, 0, 1, &result, "")) {
@@ -430,6 +440,15 @@ bool RTIMUSettings::discoverPressure(int& pressureType, unsigned char& pressureA
             return true;
         }
     }
+
+        if (HALRead(BMP280_ADDRESS, BMP280_REG_ID, 1, &result, "")) {
+            if (result == BMP280_DEVICE_ID) {
+                pressureType = RTPRESSURE_TYPE_BMP280;
+                pressureAddress = BMP280_ADDRESS;
+                HAL_INFO("Detected BMP280\n");
+                return true;
+            }
+        }
     HAL_ERROR("No pressure sensor detected\n");
     return false;
 }
@@ -987,6 +1006,8 @@ bool RTIMUSettings::saveSettings()
     setComment("  3 = LPS25H");
     setComment("  4 = MS5611");
     setComment("  5 = MS5637");
+    setComment("  6 = BMP280");
+
 
     setValue(RTIMULIB_PRESSURE_TYPE, m_pressureType);
 
